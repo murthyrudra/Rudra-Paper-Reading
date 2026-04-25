@@ -18,7 +18,7 @@ import xml.etree.ElementTree as ET
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]  # set in GitHub Actions secret
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "public", "papers.json")
 MAX_PAPERS = 30  # papers to fetch per run
-ARXIV_CATS = ["cs.CL", "cs.AI"]  # drop cs.LG to stay focused on NLP/LLMs
+ARXIV_CATS = ["cs.CL"]  # drop cs.LG to stay focused on NLP/LLMs
 MAX_ARXIV = 25
 MAX_SS = 10
 MAX_ACL = 15  # per venue fetch
@@ -27,26 +27,66 @@ MAX_ICLR = 15
 # ── Interest filter — papers not matching any keyword are skipped ─────────────
 # Edit this list to focus on what YOU care about.
 INTEREST_KEYWORDS = [
-    "retrieval-augmented",
-    "retrieval augmented",
-    "reasoning",
-    "chain-of-thought",
-    "chain of thought",
-    "in-context learning",
-    "in context learning",
-    "question answering",
-    "machine translation",
-    "tool use",
-    "function call",
-    "knowledge graph",
+    # --- RAG ---
+    "retrieval augmented generation",
+    "retrieval-augmented generation",
+    "rag",
+    "dense retrieval",
+    "hybrid retrieval",
+    "document retrieval",
+    "retriever",
+    "reranker",
+    # --- Embedding models ---
+    "embedding model",
+    "text embedding",
+    "sentence embedding",
+    "dense embedding",
+    "contrastive learning",
+    "dual encoder",
+    "bi-encoder",
+    "representation learning",
+    # --- Pretraining ---
     "pretraining",
     "pre-training",
+    "language model pretraining",
+    "foundation model",
+    "self-supervised learning",
+    "masked language modeling",
+    "causal language modeling",
+    "next token prediction",
 ]
 
 
 def is_relevant(paper):
     text = (paper.get("title", "") + " " + paper.get("abstract", "")).lower()
-    return any(kw in text for kw in INTEREST_KEYWORDS)
+    rag = any(
+        kw in text
+        for kw in [
+            "retrieval augmented",
+            "rag",
+            "retriever",
+            "reranker",
+            "dense retrieval",
+        ]
+    )
+
+    embedding = any(
+        kw in text
+        for kw in ["embedding", "bi-encoder", "dual encoder", "contrastive learning"]
+    )
+
+    pretraining = any(
+        kw in text
+        for kw in [
+            "pretraining",
+            "pre-training",
+            "masked language modeling",
+            "causal language modeling",
+            "self-supervised",
+        ]
+    )
+
+    return rag or embedding or pretraining
 
 
 VALID_TAGS = [
@@ -105,50 +145,6 @@ def fetch_arxiv(max_results=20):
                 "date": published,
                 "url": link,
                 "source": "arXiv",
-            }
-        )
-    return papers
-
-
-# ── Semantic Scholar fetch ────────────────────────────────────────────────────
-def fetch_semantic_scholar(max_results=10):
-    """Fetch recent NLP/LLM papers from Semantic Scholar public API (no key needed)."""
-    fields = "paperId,title,abstract,authors,year,publicationDate,externalIds,venue"
-    query = urllib.parse.quote("large language model NLP transformer")
-    url = (
-        f"https://api.semanticscholar.org/graph/v1/paper/search"
-        f"?query={query}&limit={max_results}&fields={fields}"
-        f"&sort=publicationDate:desc"
-    )
-    req = urllib.request.Request(url, headers={"User-Agent": "ResearchRadar/1.0"})
-    try:
-        with urllib.request.urlopen(req, timeout=20) as r:
-            data = json.loads(r.read())
-    except Exception as e:
-        print(f"Semantic Scholar fetch failed: {e}")
-        return []
-
-    papers = []
-    for p in data.get("data", []):
-        if not p.get("abstract"):
-            continue
-        arxiv_id = (p.get("externalIds") or {}).get("ArXiv")
-        paper_id = arxiv_id or p["paperId"]
-        url_link = (
-            f"https://arxiv.org/abs/{arxiv_id}"
-            if arxiv_id
-            else f"https://www.semanticscholar.org/paper/{p['paperId']}"
-        )
-        papers.append(
-            {
-                "id": f"ss-{paper_id}",
-                "arxiv_id": arxiv_id,
-                "title": p["title"],
-                "abstract": p["abstract"][:1000],
-                "authors": [a["name"] for a in (p.get("authors") or [])[:4]],
-                "date": (p.get("publicationDate") or str(p.get("year", "")))[:10],
-                "url": url_link,
-                "source": "Semantic Scholar",
             }
         )
     return papers
@@ -388,29 +384,49 @@ def fetch_iclr(max_results=MAX_ICLR):
     return papers[:max_results]
 
 
-# ── Gemini tagging + summarisation ───────────────────────────────────────────
+# ── Gemini tagging + summarisation (STRICT FILTERING) ────────────────────────
 def gemini_enrich(paper):
-    """Call Gemini Flash to tag and summarise one paper. Returns (tags, summary)."""
-    prompt = f"""You are a research assistant for an NLP/LLM researcher interested in: instruction tuning, RAG, LLM reasoning, multilingual NLP, evaluation benchmarks,
-efficient fine-tuning, and LLM agents.
+    """
+    Call Gemini Flash to:
+    1. Classify paper into: RAG / Embedding Models / LLM Pretraining / Irrelevant
+    2. Tag + summarise relevant papers
 
-Rate this paper's relevance as high/medium/low based on those interests.
+    Returns: (is_relevant, category, tags, summary)
+    """
+
+    prompt = f"""You are a research assistant focused ONLY on these areas:
+1. Retrieval-Augmented Generation (RAG)
+2. Training embedding models (dense retrieval, bi-encoders, contrastive learning)
+3. Pretraining of large language models
+
+If a paper is NOT primarily about one of these, mark it as IRRELEVANT.
 
 Paper title: {paper['title']}
 Abstract: {paper['abstract']}
 
 Tasks:
-1. Pick 2–5 tags that best describe this paper from this list ONLY:
-   {', '.join(VALID_TAGS)}
-2. Write a 2–3 sentence plain-English summary of what the paper does and why it matters for NLP/LLM researchers.
+1. Classify into EXACTLY one of:
+   - "RAG"
+   - "Embedding Models"
+   - "LLM Pretraining"
+   - "Irrelevant"
 
-Respond with valid JSON only (no markdown fences):
-{{"tags": ["tag1", "tag2"], "summary": "Your summary here."}}"""
+2. If relevant, pick 2–5 tags from:
+   {', '.join(VALID_TAGS)}
+
+3. If relevant, write a 2–3 sentence summary.
+
+Return JSON ONLY:
+{{
+  "category": "...",
+  "tags": ["tag1", "tag2"],
+  "summary": "..."
+}}"""
 
     payload = json.dumps(
         {
             "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"temperature": 0.2, "maxOutputTokens": 300},
+            "generationConfig": {"temperature": 0.1, "maxOutputTokens": 300},
         }
     ).encode()
 
@@ -418,25 +434,51 @@ Respond with valid JSON only (no markdown fences):
         "https://generativelanguage.googleapis.com/v1/models/"
         f"gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
     )
-    req = urllib.request.Request(
-        url, data=payload, headers={"Content-Type": "application/json"}, method="POST"
-    )
-    with urllib.request.urlopen(req, timeout=30) as r:
-        resp = json.loads(r.read())
 
+    req = urllib.request.Request(
+        url,
+        data=payload,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            resp = json.loads(r.read())
+    except Exception:
+        return False, "Irrelevant", [], paper.get("abstract", "")[:300]
+
+    # --- Extract text safely ---
     try:
         text = resp["candidates"][0]["content"]["parts"][0]["text"]
     except Exception:
-        return [], paper.get("abstract", "")[:300]
-    # strip accidental markdown fences
+        return False, "Irrelevant", [], paper.get("abstract", "")[:300]
+
+    # --- Clean markdown fences ---
+    text = text.strip()
     if text.startswith("```"):
         text = text.split("```")[1]
         if text.startswith("json"):
             text = text[4:]
-    result = json.loads(text)
-    tags = [t for t in result.get("tags", []) if t in VALID_TAGS][:5]
+
+    # --- Parse JSON safely ---
+    try:
+        result = json.loads(text)
+    except Exception:
+        return False, "Irrelevant", [], paper.get("abstract", "")[:300]
+
+    category = result.get("category", "").strip()
+    tags = result.get("tags", [])
     summary = result.get("summary", "")
-    return tags, summary
+
+    # --- HARD FILTER ---
+    if category not in ["RAG", "Embedding Models", "LLM Pretraining"]:
+        return False, "Irrelevant", [], ""
+
+    # --- Clean tags ---
+    tags = [t for t in tags if t in VALID_TAGS][:5]
+
+    return True, category, tags, summary
 
 
 # ── Dedup helpers ─────────────────────────────────────────────────────────────
@@ -468,22 +510,17 @@ def main():
 
     all_raw = []
 
-    print("[1/4] arXiv cs.CL + cs.AI…")
+    print("[1/3] arXiv cs.CL + cs.AI…")
     papers = fetch_arxiv()
     print(f"      Fetched {len(papers)}")
     all_raw += papers
 
-    print("[2/4] Semantic Scholar…")
-    papers = fetch_semantic_scholar()
-    print(f"      Fetched {len(papers)}")
-    all_raw += papers
-
-    print("[3/4] ACL Anthology…")
+    print("[2/3] ACL Anthology…")
     papers = fetch_acl_anthology()
     print(f"      Fetched {len(papers)}")
     all_raw += papers
 
-    print("[4/4] ICLR (OpenReview)…")
+    print("[3/3] ICLR (OpenReview)…")
     papers = fetch_iclr()
     print(f"      Fetched {len(papers)}")
     all_raw += papers
@@ -507,14 +544,20 @@ def main():
     for i, p in enumerate(relevant):
         print(f"  [{i+1}/{len(relevant)}] [{p['source']}] {p['title'][:65]}…")
         try:
-            tags, summary = gemini_enrich(p)
+            is_rel, category, tags, summary = gemini_enrich(p)
+
+            if not is_rel:
+                continue
+
+            p["category"] = category
             p["tags"] = tags
             p["summary"] = summary
+            enriched.append(p)
         except Exception as e:
             print(f"  ⚠ Gemini error: {e}")
             p["tags"] = []
             p["summary"] = p.get("abstract", "")[:300]
-        enriched.append(p)
+
         time.sleep(0.5)  # stay within free-tier rate limit
 
     print("\nMerging with existing papers and saving…")
