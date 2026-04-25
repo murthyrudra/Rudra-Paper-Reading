@@ -1,5 +1,172 @@
 {
-  "last_updated": "2026-04-25T08:39:38.178255Z",
-  "total": 0,
-  "papers": []
+  "last_updated": "2026-04-25T08:50:28.147599Z",
+  "total": 10,
+  "papers": [
+    {
+      "id": "iclr-6T3wJQhvc3",
+      "title": "Task Tokens: A Flexible Approach to Adapting Behavior Foundation Models",
+      "abstract": "Recent advancements in imitation learning for robotic control have led to transformer-based behavior foundation models (BFMs) that enable multi-modal, human-like control for humanoid agents. These models generate solutions when conditioned on high-level goals or prompts, for example, walking to a coordinate when conditioned on the position of the robot's pelvis. While excelling at zero-shot generation of robust behaviors, BFMs often require meticulous prompt engineering for specific tasks, potentially yielding suboptimal results. In this work, we introduce ``Task Tokens'' - a method to effectively tailor BFMs to specific tasks while preserving their flexibility. Our approach integrates naturally within the transformer architecture of BFMs. Task Tokens trains a task-specific encoder (tokenizer), with the original BFM remaining untouched. Our method reduces trainable parameters per task by up to $\\times 125$ and converges up to $\\times 6$ faster compared to standard baselines. In additio",
+      "authors": [
+        "Ron Vainshtein",
+        "Zohar Rimon",
+        "Shie Mannor",
+        "Chen Tessler"
+      ],
+      "date": "2025-09-20",
+      "url": "https://openreview.net/forum?id=6T3wJQhvc3",
+      "source": "ICLR",
+      "venue": "ICLR 2026 Poster",
+      "tags": [],
+      "summary": "Recent advancements in imitation learning for robotic control have led to transformer-based behavior foundation models (BFMs) that enable multi-modal, human-like control for humanoid agents. These models generate solutions when conditioned on high-level goals or prompts, for example, walking to a co"
+    },
+    {
+      "id": "iclr-u6JLh0BO5h",
+      "title": "Decomposing LLM Computation with Jets",
+      "abstract": "Large language models are becoming general knowledge engines for diverse applications. However, their computations are deeply entangled after training, resisting modularization which complicates interpretability, auditing, and long-term maintenance. We introduce Jet Expansions, a framework for expanding computational graphs using jet operators that generalize truncated Taylor series. Our method systematically decomposes language models into explicit input-to-output computational paths and complementary remainders. This functional decomposition provides a principled, knife-like operator for cutting through entanglement in LLMs, enabling scalable model inspection. We demonstrate how Jet Expansions ground and subsume the popular interpretability technique Logit Lens, reveal a (super-)exponential path structure with respect to recursive residual depth, and support several interpretability applications, including sketching a transformer language model with $n$-gram statistics extracted from",
+      "authors": [
+        "Yihong Chen",
+        "Xiangxiang Xu",
+        "Pontus Stenetorp",
+        "Sebastian Riedel"
+      ],
+      "date": "2025-09-20",
+      "url": "https://openreview.net/forum?id=u6JLh0BO5h",
+      "source": "ICLR",
+      "venue": "ICLR 2026 Poster",
+      "tags": [],
+      "summary": "Large language models are becoming general knowledge engines for diverse applications. However, their computations are deeply entangled after training, resisting modularization which complicates interpretability, auditing, and long-term maintenance. We introduce Jet Expansions, a framework for expan"
+    },
+    {
+      "id": "iclr-uq6UWRgzMr",
+      "title": "Neuron-Aware Data Selection in Instruction Tuning for Large Language Models",
+      "abstract": "Instruction Tuning (IT) has been proven to be an effective approach to unlock the powerful capabilities of large language models (LLMs). \nRecent studies indicate that excessive IT data can degrade LLMs performance, while carefully selecting a small subset of high-quality IT data can significantly enhance their capabilities. Therefore, identifying the most efficient subset data from the IT dataset to effectively develop either specific or general abilities in LLMs has become a critical challenge.\nTo address this, we propose a novel and efficient framework called Nait. Nait evaluates the impact of IT data on LLMs performance by analyzing the similarity of neuron activation patterns between the IT dataset and the target domain capability. Specifically, Nait captures neuron activation patterns from in-domain datasets of target domain capabilities to construct reusable and transferable neuron activation features. It then evaluates and selects optimal samples based on the similarity between ",
+      "authors": [
+        "Xin Chen",
+        "Junchao Wu",
+        "Shu Yang",
+        "Runzhe Zhan"
+      ],
+      "date": "2025-09-20",
+      "url": "https://openreview.net/forum?id=uq6UWRgzMr",
+      "source": "ICLR",
+      "venue": "ICLR 2026 Poster",
+      "tags": [],
+      "summary": "Instruction Tuning (IT) has been proven to be an effective approach to unlock the powerful capabilities of large language models (LLMs). \nRecent studies indicate that excessive IT data can degrade LLMs performance, while carefully selecting a small subset of high-quality IT data can significantly en"
+    },
+    {
+      "id": "iclr-NvKvW5k6Kk",
+      "title": "Improving Semantic Proximity in Information Retrieval through Cross-Lingual Alignment",
+      "abstract": "With the increasing accessibility and utilization of multilingual documents, Cross-Lingual Information Retrieval (CLIR) has emerged as an important research area. Conventionally, CLIR tasks have been conducted under settings where the language of documents differs from that of queries, and typically, the documents are composed in a single coherent language. In this paper, we highlight that in such a setting, the cross-lingual alignment capability may not be evaluated adequately. Specifically, we observe that, in a document pool where English documents coexist with another language, most multilingual retrievers tend to prioritize unrelated English documents over the related document written in the same language as the query. To rigorously analyze and quantify this phenomenon, we introduce various scenarios and metrics designed to evaluate the cross-lingual alignment performance of multilingual retrieval models. Furthermore, to improve cross-lingual performance under these challenging co",
+      "authors": [
+        "Seongtae Hong",
+        "Youngjoon Jang",
+        "Jungseob Lee",
+        "Hyeonseok Moon"
+      ],
+      "date": "2025-09-20",
+      "url": "https://openreview.net/forum?id=NvKvW5k6Kk",
+      "source": "ICLR",
+      "venue": "ICLR 2026 Poster",
+      "tags": [],
+      "summary": "With the increasing accessibility and utilization of multilingual documents, Cross-Lingual Information Retrieval (CLIR) has emerged as an important research area. Conventionally, CLIR tasks have been conducted under settings where the language of documents differs from that of queries, and typically"
+    },
+    {
+      "id": "iclr-U2j9ZNgHqw",
+      "title": "Test-Time Accuracy-Cost Control in Neural Simulators via Recurrent-Depth",
+      "abstract": "Accuracy-cost trade-offs are a fundamental aspect of scientific computing. Classical numerical methods inherently offer such a trade-off: increasing resolution, order, or precision typically yields more accurate solutions at higher computational cost. We introduce \\textbf{Recurrent-Depth Simulator} (\\textbf{RecurrSim}) an architecture-agnostic framework that enables explicit test-time control over accuracy-cost trade-offs in neural simulators without requiring retraining or architectural redesign. By setting the number of recurrent iterations $K$, users can generate fast, less-accurate simulations for exploratory runs or real-time control loops, or increase $K$ for more-accurate simulations in critical applications or offline studies. We demonstrate RecurrSim's effectiveness across fluid dynamics benchmarks (Burgers, Korteweg-De Vries, Kuramoto-Sivashinsky), achieving physically faithful simulations over long horizons even in low-compute settings. On high-dimensional 3D compressible Na",
+      "authors": [
+        "Harris Abdul Majid",
+        "Pietro Sittoni",
+        "Francesco Tudisco"
+      ],
+      "date": "2025-09-20",
+      "url": "https://openreview.net/forum?id=U2j9ZNgHqw",
+      "source": "ICLR",
+      "venue": "ICLR 2026 Poster",
+      "tags": [],
+      "summary": "Accuracy-cost trade-offs are a fundamental aspect of scientific computing. Classical numerical methods inherently offer such a trade-off: increasing resolution, order, or precision typically yields more accurate solutions at higher computational cost. We introduce \\textbf{Recurrent-Depth Simulator} "
+    },
+    {
+      "id": "iclr-1BXojAgNrg",
+      "title": "MedAraBench: Large-scale Arabic Medical Question Answering Dataset and Benchmark",
+      "abstract": "Arabic remains one of the most underrepresented languages in natural language processing research, particularly in medical applications, due to the limited availability of open-source data and benchmarks. The lack of resources hinders efforts to evaluate and advance the multilingual capabilities of Large Language Models (LLMs). In this paper, we introduce MedAraBench, a large-scale dataset consisting of Arabic multiple-choice question-answer pairs across various medical specialties. We constructed the dataset by manually digitizing a large repository of academic materials created by medical professionals in the Arabic-speaking region. We then conducted extensive preprocessing and split the dataset into training and test sets to support future research efforts in the area. To assess the quality of the data, we adopted two frameworks, namely expert human evaluation and LLM-as-a-judge. Our dataset is diverse and of high quality, spanning 19 specialties and five difficulty levels. For benc",
+      "authors": [
+        "Mouath Abu Daoud",
+        "Leen Kharouf",
+        "Omar El Hajj",
+        "Dana El Samad"
+      ],
+      "date": "2025-09-20",
+      "url": "https://openreview.net/forum?id=1BXojAgNrg",
+      "source": "ICLR",
+      "venue": "ICLR 2026 Poster",
+      "tags": [],
+      "summary": "Arabic remains one of the most underrepresented languages in natural language processing research, particularly in medical applications, due to the limited availability of open-source data and benchmarks. The lack of resources hinders efforts to evaluate and advance the multilingual capabilities of "
+    },
+    {
+      "id": "iclr-dGxAYNK6JU",
+      "title": "PoinnCARE: Hyperbolic Multi-Modal Learning for Enzyme Classification",
+      "abstract": "Enzyme Commission (EC) number prediction is vital for elucidating enzyme functions and advancing biotechnology applications. However, current methods struggle to capture the hierarchical relationships among enzymes and often overlook critical structural and active site features. To bridge this gap, we introduce PoinnCARE, a novel framework that jointly encodes and aligns multi-modal data from enzyme sequences, structures, and active sites in hyperbolic space. By integrating graph diffusion and alignment techniques, PoinnCARE mitigates data sparsity and enriches functional representations, while hyperbolic embedding preserves the intrinsic hierarchy of the EC system with theoretical guarantees in low-dimensional spaces. Extensive experiments on four datasets from the CARE benchmark demonstrate that PoinnCARE consistently and significantly outperforms state-of-the-art methods in EC number prediction.",
+      "authors": [
+        "Kun XIE",
+        "Peng Zhou",
+        "Xingyi Zhang",
+        "Wei Liu"
+      ],
+      "date": "2025-09-20",
+      "url": "https://openreview.net/forum?id=dGxAYNK6JU",
+      "source": "ICLR",
+      "venue": "ICLR 2026 Poster",
+      "tags": [],
+      "summary": "Enzyme Commission (EC) number prediction is vital for elucidating enzyme functions and advancing biotechnology applications. However, current methods struggle to capture the hierarchical relationships among enzymes and often overlook critical structural and active site features. To bridge this gap, "
+    },
+    {
+      "id": "iclr-n3iFV0gLMc",
+      "title": "FingerTip 20K: A Benchmark for Proactive and Personalized Mobile LLM Agents",
+      "abstract": "Mobile GUI agents are becoming critical tools to improve user experience on smart devices, with multimodal large language models (MLLMs) emerging as the dominant paradigms in this domain. Current agents, however, rely on explicit human instructions, overlooking the potential to leverage the contextual information (like location, time, user profile) and historical data for proactive task suggestions. Besides, previous works focus on optimizing the success rate during task execution, but pay less attention to the personalized execution trajectory, thereby neglecting potentially vast differences in user preferences. To address these challenges, we introduce the FingerTip 20K benchmark. We collected 20K unique human demonstrations of multi-step Android device interactions across a variety of everyday apps. These demonstrations are not isolated but are continuously acquired from the users' long-term usage in their real lives, and encompass essential user-related contextual information. The ",
+      "authors": [
+        "Qinglong Yang",
+        "Haoming Li",
+        "Haotian Zhao",
+        "Xiaokai Yan"
+      ],
+      "date": "2025-09-20",
+      "url": "https://openreview.net/forum?id=n3iFV0gLMc",
+      "source": "ICLR",
+      "venue": "ICLR 2026 Poster",
+      "tags": [],
+      "summary": "Mobile GUI agents are becoming critical tools to improve user experience on smart devices, with multimodal large language models (MLLMs) emerging as the dominant paradigms in this domain. Current agents, however, rely on explicit human instructions, overlooking the potential to leverage the contextu"
+    },
+    {
+      "id": "iclr-q05hC1Pzkr",
+      "title": "Characterizing and Optimizing the Spatial Kernel of Multi Resolution Hash Encodings",
+      "abstract": "Multi-Resolution Hash Encoding (MHE), the foundational technique behind Instant Neural Graphics Primitives, provides a powerful parameterization for neural fields. However, its spatial behavior lacks rigorous understanding from a physical systems perspective, leading to reliance on heuristics for hyperparameter selection. This work introduces a novel analytical approach that characterizes MHE by examining its Point Spread Function (PSF), which is analogous to the Green's function of the system. This methodology enables a quantification of the encoding's spatial resolution and fidelity. We derive a closed-form approximation for the collision-free PSF, uncovering inherent grid-induced anisotropy and a logarithmic spatial profile. We establish that the idealized spatial bandwidth, specifically the Full Width at Half Maximum (FWHM), is determined by the average resolution, $N_{\\text{avg}}$. This leads to a counterintuitive finding: the effective resolution of the model is governed by the b",
+      "authors": [
+        "Tianxiang Dai",
+        "Jonathan Fan"
+      ],
+      "date": "2025-09-20",
+      "url": "https://openreview.net/forum?id=q05hC1Pzkr",
+      "source": "ICLR",
+      "venue": "ICLR 2026 Poster",
+      "tags": [],
+      "summary": "Multi-Resolution Hash Encoding (MHE), the foundational technique behind Instant Neural Graphics Primitives, provides a powerful parameterization for neural fields. However, its spatial behavior lacks rigorous understanding from a physical systems perspective, leading to reliance on heuristics for hy"
+    },
+    {
+      "id": "iclr-ScpCaOVGw1",
+      "title": "EVEREST: A Transformer for Probabilistic Rare-Event Anomaly Detection with Evidential and Tail-Aware Uncertainty",
+      "abstract": "Forecasting rare events in multivariate time-series data is a central challenge in machine learning, complicated by severe class imbalance, long-range dependencies, and distributional uncertainty. We introduce EVEREST, a transformer-based architecture for probabilistic rare-event forecasting that delivers calibrated predictions and tail-aware risk estimation, with auxiliary interpretability through attention-based signal attribution. EVEREST integrates four key components: (i) a learnable attention bottleneck for soft aggregation of temporal dynamics; (ii) an evidential head for estimating aleatoric and epistemic uncertainty via a Normal\u2013Inverse\u2013Gamma distribution; (iii) an extreme-value head that models tail risk using a Generalized Pareto Distribution; and (iv) a lightweight precursor head for early-event detection. These modules are jointly optimised with a composite loss combining focal loss, evidential negative log-likelihood, and a tail-sensitive EVT penalty, and act only at trai",
+      "authors": [
+        "Antanas \u017dilinskas",
+        "Robert Noel Shorten",
+        "Jakub Marecek"
+      ],
+      "date": "2025-09-20",
+      "url": "https://openreview.net/forum?id=ScpCaOVGw1",
+      "source": "ICLR",
+      "venue": "ICLR 2026 Poster",
+      "tags": [],
+      "summary": "Forecasting rare events in multivariate time-series data is a central challenge in machine learning, complicated by severe class imbalance, long-range dependencies, and distributional uncertainty. We introduce EVEREST, a transformer-based architecture for probabilistic rare-event forecasting that de"
+    }
+  ]
 }
