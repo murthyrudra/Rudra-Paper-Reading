@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-04-25T08:50:28.147599Z",
-  "total": 10,
+  "last_updated": "2026-04-25T08:58:35.084890Z",
+  "total": 18,
   "papers": [
     {
       "id": "iclr-6T3wJQhvc3",
@@ -167,6 +167,140 @@
       "venue": "ICLR 2026 Poster",
       "tags": [],
       "summary": "Forecasting rare events in multivariate time-series data is a central challenge in machine learning, complicated by severe class imbalance, long-range dependencies, and distributional uncertainty. We introduce EVEREST, a transformer-based architecture for probabilistic rare-event forecasting that de"
+    },
+    {
+      "id": "acl-2404.00415",
+      "title": "CoDa: Constrained Generation based Data Augmentation for Low-Resource NLP",
+      "abstract": "We present CoDa (Constrained Generation based Data Augmentation), a controllable, effective, and training-free data augmentation technique for low-resource (data-scarce) NLP. Our approach is based on prompting off-the-shelf instruction-following Large Language Models (LLMs) for generating text that satisfies a set of constraints. Precisely, we extract a set of simple constraints from every instance in the low-resource dataset and verbalize them to prompt an LLM to generate novel and diverse training instances. Our findings reveal that synthetic data that follows simple constraints in the downstream dataset act as highly effective augmentations, and CoDa can achieve this without intricate decoding-time constrained generation techniques or fine-tuning with complex algorithms that eventually make the model biased toward the small number of training instances. Additionally, CoDa is the first framework that provides users explicit control over the augmentation generation process, thereby al",
+      "authors": [
+        "Chandra Kiran Reddy Evuru",
+        "Sreyan Ghosh",
+        "Sonal Kumar",
+        "S. Ramaneswaran"
+      ],
+      "date": "2024-03-30",
+      "url": "https://arxiv.org/abs/2404.00415",
+      "source": "ACL Anthology",
+      "venue": "NAACL-HLT",
+      "tags": [],
+      "summary": "We present CoDa (Constrained Generation based Data Augmentation), a controllable, effective, and training-free data augmentation technique for low-resource (data-scarce) NLP. Our approach is based on prompting off-the-shelf instruction-following Large Language Models (LLMs) for generating text that "
+    },
+    {
+      "id": "acl-09308ac439064799e48bf6876973e93b574039a8",
+      "title": "Secure Your Model: An Effective Key Prompt Protection Mechanism for Large Language Models",
+      "abstract": "Large language models (LLMs) have notably revolutionized many domains within natural language processing due to their exceptional performance. Their security has become increasingly vital. This study is centered on protecting LLMs against unauthorized access and potential theft. We propose a simple yet effective protective measure wherein a unique key prompt is embedded within the LLM. This mechanism enables the model to respond only when presented with the correct key prompt; otherwise, LLMs will refuse to react to any input instructions. This key prompt protection offers a robust solution to prevent the unauthorized use of LLMs, as the model becomes unusable without the correct key. We evaluated the proposed protection on multiple LLMs and NLP tasks. Results demonstrate that our method can successfully protect the LLM without significantly impacting the model\u2019s original function. Moreover, we demonstrate potential attacks that attempt to bypass the protection mechanism will adversely",
+      "authors": [
+        "Ruixiang Tang",
+        "Yu-Neng Chuang",
+        "Xuanting Cai",
+        "Mengnan Du"
+      ],
+      "date": "2024",
+      "url": "https://www.semanticscholar.org/paper/09308ac439064799e48bf6876973e93b574039a8",
+      "source": "ACL Anthology",
+      "venue": "NAACL-HLT",
+      "tags": [],
+      "summary": "Large language models (LLMs) have notably revolutionized many domains within natural language processing due to their exceptional performance. Their security has become increasingly vital. This study is centered on protecting LLMs against unauthorized access and potential theft. We propose a simple "
+    },
+    {
+      "id": "acl-09c3a340f5d6bb8b9b9f6a4a77326c0d692d4c66",
+      "title": "AdaPT: A Set of Guidelines for Hyperbolic Multimodal Multilingual NLP",
+      "abstract": "The Euclidean space is the familiar space for training neural models and performing arithmetic operations. However, many data types inherently possess complex geometries, and model training methods involve operating over their latent representations, which cannot be effectively captured in the Euclidean space. The hyperbolic space provides a more generalized representative geometry to model the hierarchical complexities of the tree-like structure of natural language. We propose A DA PT a set of guidelines for initialization, parametrization, and training of neural networks, which adapts to the dataset and can be used with different manifolds. A DA PT can be generalized over any existing neural network training methodology and leads to more stable training without a substantial increase in training time. We apply A DA PT guidelines over two state-of-the-art deep learning approaches and empirically demonstrate its effectiveness through experiments on three tasks over 12 languages across ",
+      "authors": [
+        "Ramit Sawhney",
+        "Shrey Pandit",
+        "Vishwa Shah",
+        "Megh Thakkar"
+      ],
+      "date": "2024",
+      "url": "https://www.semanticscholar.org/paper/09c3a340f5d6bb8b9b9f6a4a77326c0d692d4c66",
+      "source": "ACL Anthology",
+      "venue": "NAACL-HLT",
+      "tags": [],
+      "summary": "The Euclidean space is the familiar space for training neural models and performing arithmetic operations. However, many data types inherently possess complex geometries, and model training methods involve operating over their latent representations, which cannot be effectively captured in the Eucli"
+    },
+    {
+      "id": "acl-ad1052e63c208e1783bc63d24a6c454f535c259a",
+      "title": "GoT: Effective Graph-of-Thought Reasoning in Language Models",
+      "abstract": "With the widespread use of language models (LMs) in NLP tasks, researchers have discovered the potential of Chain-of-thought (CoT) to assist LMs in accomplishing complex reasoning tasks by generating intermediate steps. However, human thought processes are often non-linear, rather than simply sequential chains of thoughts. Therefore, we propose Graph-of-Thought (GoT) reasoning, which models human thought processes not only as a chain but also as a graph. By representing thought units as nodes and connections between them as edges, our approach captures the non-sequential nature of human thinking and allows for a more realistic modeling of thought processes. GoT adopts a two-stage framework with an additional GoT encoder for thought graph representation and fuses the graph representation with the original input representation through a gated fusion mechanism. We evaluate GoT\u2019s performance on a text-only reasoning task (AQUA-RAT) and a multimodal reasoning task (ScienceQA). Our model ach",
+      "authors": [
+        "Yao Yao",
+        "Z. Li",
+        "Hai Zhao"
+      ],
+      "date": "2024",
+      "url": "https://www.semanticscholar.org/paper/ad1052e63c208e1783bc63d24a6c454f535c259a",
+      "source": "ACL Anthology",
+      "venue": "NAACL-HLT",
+      "tags": [],
+      "summary": "With the widespread use of language models (LMs) in NLP tasks, researchers have discovered the potential of Chain-of-thought (CoT) to assist LMs in accomplishing complex reasoning tasks by generating intermediate steps. However, human thought processes are often non-linear, rather than simply sequen"
+    },
+    {
+      "id": "acl-2310.07676",
+      "title": "Composite Backdoor Attacks Against Large Language Models",
+      "abstract": "Large language models (LLMs) have demonstrated superior performance compared to previous methods on various tasks, and often serve as the foundation models for many researches and services. However, the untrustworthy third-party LLMs may covertly introduce vulnerabilities for downstream tasks. In this paper, we explore the vulnerability of LLMs through the lens of backdoor attacks. Different from existing backdoor attacks against LLMs, ours scatters multiple trigger keys in different prompt components. Such a Composite Backdoor Attack (CBA) is shown to be stealthier than implanting the same multiple trigger keys in only a single component. CBA ensures that the backdoor is activated only when all trigger keys appear. Our experiments demonstrate that CBA is effective in both natural language processing (NLP) and multimodal tasks. For instance, with $3\\%$ poisoning samples against the LLaMA-7B model on the Emotion dataset, our attack achieves a $100\\%$ Attack Success Rate (ASR) with a Fal",
+      "authors": [
+        "Hai Huang",
+        "Zhengyu Zhao",
+        "Michael Backes",
+        "Yun Shen"
+      ],
+      "date": "2023-10-11",
+      "url": "https://arxiv.org/abs/2310.07676",
+      "source": "ACL Anthology",
+      "venue": "NAACL-HLT",
+      "tags": [],
+      "summary": "Large language models (LLMs) have demonstrated superior performance compared to previous methods on various tasks, and often serve as the foundation models for many researches and services. However, the untrustworthy third-party LLMs may covertly introduce vulnerabilities for downstream tasks. In th"
+    },
+    {
+      "id": "acl-ed53449cb074fbf73b0cc233af0344c91c641ec7",
+      "title": "Minimally-Supervised Relation Induction from Pre-trained Language Model",
+      "abstract": "Relation Induction is a very practical task in 001 Natural Language Processing (NLP) area. In 002 practical application scenarios, people want to 003 induce more entity pairs having the same rela- 004 tion from only a few seed entity pairs. Thus, in- 005 stead of the laborious supervised setting, in this 006 paper, we focus on the minimally-supervised 007 setting where only a couple of seed entity pairs 008 per relation are provided. Although the conven- 009 tional relation induction methods have made 010 some success, their performance depends heav- 011 ily on the quality of word embeddings. The 012 great success of Pre-trained Language Mod- 013 els, such as BERT, changes the NLP area a 014 lot , and they are proven to be able to better 015 capture relation knowledge. In this paper, we 016 propose a novel method to induce relation with 017 BERT under the minimally-supervised setting. 018 Specifically, we firstly extract proper templates 019 from the corpus by using the mask-prediction",
+      "authors": [
+        "Lu Sun",
+        "Yongliang Shen",
+        "Weiming Lu"
+      ],
+      "date": "2022",
+      "url": "https://www.semanticscholar.org/paper/ed53449cb074fbf73b0cc233af0344c91c641ec7",
+      "source": "ACL Anthology",
+      "venue": "NAACL-HLT",
+      "tags": [],
+      "summary": "Relation Induction is a very practical task in 001 Natural Language Processing (NLP) area. In 002 practical application scenarios, people want to 003 induce more entity pairs having the same rela- 004 tion from only a few seed entity pairs. Thus, in- 005 stead of the laborious supervised setting, in"
+    },
+    {
+      "id": "acl-2104.08815",
+      "title": "FedNLP: Benchmarking Federated Learning Methods for Natural Language Processing Tasks",
+      "abstract": "Increasing concerns and regulations about data privacy and sparsity necessitate the study of privacy-preserving, decentralized learning methods for natural language processing (NLP) tasks. Federated learning (FL) provides promising approaches for a large number of clients (e.g., personal devices or organizations) to collaboratively learn a shared global model to benefit all clients while allowing users to keep their data locally. Despite interest in studying FL methods for NLP tasks, a systematic comparison and analysis is lacking in the literature. Herein, we present the FedNLP, a benchmarking framework for evaluating federated learning methods on four different task formulations: text classification, sequence tagging, question answering, and seq2seq. We propose a universal interface between Transformer-based language models (e.g., BERT, BART) and FL methods (e.g., FedAvg, FedOPT, etc.) under various non-IID partitioning strategies. Our extensive experiments with FedNLP provide empiri",
+      "authors": [
+        "Bill Yuchen Lin",
+        "Chaoyang He",
+        "ZiHang Zeng",
+        "Hulin Wang"
+      ],
+      "date": "2021-04-18",
+      "url": "https://arxiv.org/abs/2104.08815",
+      "source": "ACL Anthology",
+      "venue": "NAACL-HLT",
+      "tags": [],
+      "summary": "Increasing concerns and regulations about data privacy and sparsity necessitate the study of privacy-preserving, decentralized learning methods for natural language processing (NLP) tasks. Federated learning (FL) provides promising approaches for a large number of clients (e.g., personal devices or "
+    },
+    {
+      "id": "acl-2101.00204",
+      "title": "BanglaBERT: Language Model Pretraining and Benchmarks for Low-Resource Language Understanding Evaluation in Bangla",
+      "abstract": "In this work, we introduce BanglaBERT, a BERT-based Natural Language Understanding (NLU) model pretrained in Bangla, a widely spoken yet low-resource language in the NLP literature. To pretrain BanglaBERT, we collect 27.5 GB of Bangla pretraining data (dubbed `Bangla2B+') by crawling 110 popular Bangla sites. We introduce two downstream task datasets on natural language inference and question answering and benchmark on four diverse NLU tasks covering text classification, sequence labeling, and span prediction. In the process, we bring them under the first-ever Bangla Language Understanding Benchmark (BLUB). BanglaBERT achieves state-of-the-art results outperforming multilingual and monolingual models. We are making the models, datasets, and a leaderboard publicly available at https://github.com/csebuetnlp/banglabert to advance Bangla NLP.",
+      "authors": [
+        "Abhik Bhattacharjee",
+        "Tahmid Hasan",
+        "Kazi Samin Mubasshir",
+        "Md. Saiful Islam"
+      ],
+      "date": "2021-01-01",
+      "url": "https://arxiv.org/abs/2101.00204",
+      "source": "ACL Anthology",
+      "venue": "NAACL-HLT",
+      "tags": [],
+      "summary": "In this work, we introduce BanglaBERT, a BERT-based Natural Language Understanding (NLU) model pretrained in Bangla, a widely spoken yet low-resource language in the NLP literature. To pretrain BanglaBERT, we collect 27.5 GB of Bangla pretraining data (dubbed `Bangla2B+') by crawling 110 popular Ban"
     }
   ]
 }
