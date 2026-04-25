@@ -1,0 +1,39 @@
+name: Daily Paper Fetch
+
+on:
+  schedule:
+    # Runs at 07:00 UTC every day (12:30 IST)
+    - cron: "0 7 * * *"
+  workflow_dispatch:   # allow manual trigger from GitHub UI
+
+permissions:
+  contents: write      # needed to commit papers.json back to the repo
+
+jobs:
+  fetch-papers:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # No pip installs needed — script uses stdlib only
+
+      - name: Fetch and enrich papers
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python scripts/fetch_papers.py
+
+      - name: Commit updated papers.json
+        run: |
+          git config user.name  "Research Radar Bot"
+          git config user.email "bot@research-radar"
+          git add public/papers.json
+          # Only commit if something actually changed
+          git diff --cached --quiet || git commit -m "chore: daily paper update $(date -u +%Y-%m-%d)"
+          git push
