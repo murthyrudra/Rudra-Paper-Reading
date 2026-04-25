@@ -1,5 +1,56 @@
 {
-    "last_updated": "2026-04-25T08:50:28.147599Z",
-    "total": 0,
-    "papers": []
+  "last_updated": "2026-04-25T10:09:45.867613Z",
+  "total": 3,
+  "papers": [
+    {
+      "id": "iclr-1BXojAgNrg",
+      "title": "MedAraBench: Large-scale Arabic Medical Question Answering Dataset and Benchmark",
+      "abstract": "Arabic remains one of the most underrepresented languages in natural language processing research, particularly in medical applications, due to the limited availability of open-source data and benchmarks. The lack of resources hinders efforts to evaluate and advance the multilingual capabilities of Large Language Models (LLMs). In this paper, we introduce MedAraBench, a large-scale dataset consisting of Arabic multiple-choice question-answer pairs across various medical specialties. We constructed the dataset by manually digitizing a large repository of academic materials created by medical professionals in the Arabic-speaking region. We then conducted extensive preprocessing and split the dataset into training and test sets to support future research efforts in the area. To assess the quality of the data, we adopted two frameworks, namely expert human evaluation and LLM-as-a-judge. Our dataset is diverse and of high quality, spanning 19 specialties and five difficulty levels. For benc",
+      "authors": [
+        "Mouath Abu Daoud",
+        "Leen Kharouf",
+        "Omar El Hajj",
+        "Dana El Samad"
+      ],
+      "date": "2025-09-20",
+      "url": "https://openreview.net/forum?id=1BXojAgNrg",
+      "source": "ICLR",
+      "venue": "ICLR 2026 Poster",
+      "tags": [],
+      "summary": "Arabic remains one of the most underrepresented languages in natural language processing research, particularly in medical applications, due to the limited availability of open-source data and benchmarks. The lack of resources hinders efforts to evaluate and advance the multilingual capabilities of "
+    },
+    {
+      "id": "ss-2303.18223",
+      "arxiv_id": "2303.18223",
+      "title": "A Survey of Large Language Models",
+      "abstract": "Language is essentially a complex, intricate system of human expressions governed by grammatical rules. It poses a significant challenge to develop capable AI algorithms for comprehending and grasping a language. As a major approach, language modeling has been widely studied for language understanding and generation in the past two decades, evolving from statistical language models to neural language models. Recently, pre-trained language models (PLMs) have been proposed by pre-training Transformer models over large-scale corpora, showing strong capabilities in solving various NLP tasks. Since researchers have found that model scaling can lead to performance improvement, they further study the scaling effect by increasing the model size to an even larger size. Interestingly, when the parameter scale exceeds a certain level, these enlarged language models not only achieve a significant performance improvement but also show some special abilities that are not present in small-scale langu",
+      "authors": [
+        "Wayne Xin Zhao",
+        "Kun Zhou",
+        "Junyi Li",
+        "Tianyi Tang"
+      ],
+      "date": "2023-03-31",
+      "url": "https://arxiv.org/abs/2303.18223",
+      "source": "Semantic Scholar",
+      "tags": [],
+      "summary": "Language is essentially a complex, intricate system of human expressions governed by grammatical rules. It poses a significant challenge to develop capable AI algorithms for comprehending and grasping a language. As a major approach, language modeling has been widely studied for language understandi"
+    },
+    {
+      "id": "acl-W19-5006",
+      "title": "Transfer Learning in Biomedical Natural Language Processing: An Evaluation of BERT and ELMo on Ten Benchmarking Datasets",
+      "abstract": "Inspired by the success of the General Language Understanding Evaluation benchmark, we introduce the Biomedical Language Understanding Evaluation (BLUE) benchmark to facilitate research in the development of pre-training language representations in the biomedicine domain. The benchmark consists of five tasks with ten datasets that cover both biomedical and clinical texts with different dataset sizes and difficulties. We also evaluate several baselines based on BERT and ELMo and find that the BERT model pre-trained on PubMed abstracts and MIMIC-III clinical notes achieves the best results. We make the datasets, pre-trained models, and codes publicly available at https://github.com/ ncbi-nlp/BLUE_Benchmark.",
+      "authors": [
+        "Yifan Peng",
+        "Shankai Yan",
+        "Zhiyong Lu"
+      ],
+      "date": "2019-06-13",
+      "url": "https://aclanthology.org/W19-5006",
+      "source": "ACL Anthology",
+      "venue": "BioNLP@ACL",
+      "tags": [],
+      "summary": "Inspired by the success of the General Language Understanding Evaluation benchmark, we introduce the Biomedical Language Understanding Evaluation (BLUE) benchmark to facilitate research in the development of pre-training language representations in the biomedicine domain. The benchmark consists of f"
+    }
+  ]
 }
