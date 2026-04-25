@@ -204,6 +204,20 @@ ACL_VENUES = [
 ]
 
 
+def safe_urlopen(req, retries=5):
+    for i in range(retries):
+        try:
+            return urllib.request.urlopen(req, timeout=20)
+        except Exception as e:
+            if "429" in str(e):
+                sleep = (2**i) + 1
+                print(f"    Rate limited. Sleeping {sleep}s")
+                time.sleep(sleep)
+            else:
+                raise
+    raise Exception("Max retries exceeded")
+
+
 def fetch_acl_anthology(max_results=MAX_ACL):
     """
     Pull recent papers from ACL venues via Semantic Scholar's venue filter.
@@ -221,7 +235,7 @@ def fetch_acl_anthology(max_results=MAX_ACL):
         )
         req = urllib.request.Request(url, headers={"User-Agent": "ResearchRadar/1.0"})
         try:
-            with urllib.request.urlopen(req, timeout=20) as r:
+            with safe_urlopen(req) as r:
                 data = json.loads(r.read())
             for p in data.get("data", []):
                 v = (p.get("venue") or "").upper()
@@ -258,7 +272,7 @@ def fetch_acl_anthology(max_results=MAX_ACL):
                         "venue": p.get("venue", venue),
                     }
                 )
-            time.sleep(0.3)
+            time.sleep(1.3)
         except Exception as e:
             print(f"  ⚠ ACL S2 fetch ({venue}) failed: {e}")
 
@@ -266,7 +280,7 @@ def fetch_acl_anthology(max_results=MAX_ACL):
     # Use as a fallback / supplement when S2 doesn't return enough
     if len(papers) < 5:
         try:
-            rss_url = "https://aclanthology.org/anthology.rss"
+            rss_url = "https://aclanthology.org/feed.xml"
             req = urllib.request.Request(
                 rss_url, headers={"User-Agent": "ResearchRadar/1.0"}
             )
@@ -435,7 +449,7 @@ Respond with valid JSON only (no markdown fences):
     ).encode()
 
     url = (
-        "https://generativelanguage.googleapis.com/v1beta/models/"
+        "https://generativelanguage.googleapis.com/v1/models/"
         f"gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
     )
     req = urllib.request.Request(
@@ -444,7 +458,10 @@ Respond with valid JSON only (no markdown fences):
     with urllib.request.urlopen(req, timeout=30) as r:
         resp = json.loads(r.read())
 
-    text = resp["candidates"][0]["content"]["parts"][0]["text"].strip()
+    try:
+        text = resp["candidates"][0]["content"]["parts"][0]["text"]
+    except Exception:
+        return [], paper.get("abstract", "")[:300]
     # strip accidental markdown fences
     if text.startswith("```"):
         text = text.split("```")[1]

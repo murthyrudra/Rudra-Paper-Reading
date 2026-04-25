@@ -9,9 +9,15 @@ on:
 permissions:
   contents: write      # needed to commit papers.json back to the repo
 
+concurrency:
+  group: paper-fetch
+  cancel-in-progress: true
+
+
 jobs:
   fetch-papers:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout repo
