@@ -16,27 +16,67 @@ import xml.etree.ElementTree as ET
 
 # ── Config ────────────────────────────────────────────────────────────────────
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]  # set in GitHub Actions secret
-OUTPUT_PATH    = os.path.join(os.path.dirname(__file__), "..", "public", "papers.json")
-MAX_PAPERS     = 30   # papers to fetch per run
-ARXIV_CATS     = ["cs.CL", "cs.AI", "cs.LG"]
+OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "public", "papers.json")
+MAX_PAPERS = 30  # papers to fetch per run
+ARXIV_CATS = ["cs.CL", "cs.AI", "cs.LG"]
 
 VALID_TAGS = [
-    "LLMs", "RAG", "Agents", "Reasoning", "Fine-tuning",
-    "NLP", "Evaluation", "Multimodal", "Alignment", "RLHF",
-    "Prompting", "Retrieval", "Efficient Training", "Datasets",
-    "Interpretability", "Code Generation", "Speech", "Vision-Language",
-    "Knowledge Graphs", "Reinforcement Learning"
+    "LLMs",
+    "RAG",
+    "Agents",
+    "Reasoning",
+    "Fine-tuning",
+    "NLP",
+    "Evaluation",
+    "Multimodal",
+    "Alignment",
+    "RLHF",
+    "Prompting",
+    "Retrieval",
+    "Efficient Training",
+    "Datasets",
+    "Interpretability",
+    "Code Generation",
+    "Speech",
+    "Vision-Language",
+    "Knowledge Graphs",
+    "Reinforcement Learning",
 ]
+
+INTEREST_KEYWORDS = [
+    "language model",
+    "LLM",
+    "instruction tuning",
+    "RAG",
+    "retrieval",
+    "reasoning",
+    "prompt",
+    "fine-tuning",
+    "NLP",
+    "transformer",
+    "agent",
+    "evaluation",
+    "benchmark",
+    "alignment",
+]
+
+
+def is_relevant(paper):
+    text = (paper["title"] + " " + paper["abstract"]).lower()
+    return any(kw in text for kw in INTEREST_KEYWORDS)
+
 
 # ── arXiv fetch ───────────────────────────────────────────────────────────────
 def fetch_arxiv(max_results=20):
     query = "+OR+".join(f"cat:{c}" for c in ARXIV_CATS)
-    params = urllib.parse.urlencode({
-        "search_query": query,
-        "sortBy": "submittedDate",
-        "sortOrder": "descending",
-        "max_results": max_results,
-    })
+    params = urllib.parse.urlencode(
+        {
+            "search_query": query,
+            "sortBy": "submittedDate",
+            "sortOrder": "descending",
+            "max_results": max_results,
+        }
+    )
     url = f"https://export.arxiv.org/api/query?{params}"
     with urllib.request.urlopen(url, timeout=30) as r:
         raw = r.read()
@@ -46,28 +86,33 @@ def fetch_arxiv(max_results=20):
     papers = []
     for entry in root.findall("atom:entry", ns):
         arxiv_id = entry.find("atom:id", ns).text.split("/abs/")[-1]
-        title    = entry.find("atom:title", ns).text.strip().replace("\n", " ")
-        summary  = entry.find("atom:summary", ns).text.strip().replace("\n", " ")
-        authors  = [a.find("atom:name", ns).text for a in entry.findall("atom:author", ns)]
+        title = entry.find("atom:title", ns).text.strip().replace("\n", " ")
+        summary = entry.find("atom:summary", ns).text.strip().replace("\n", " ")
+        authors = [
+            a.find("atom:name", ns).text for a in entry.findall("atom:author", ns)
+        ]
         published = entry.find("atom:published", ns).text[:10]
-        link     = f"https://arxiv.org/abs/{arxiv_id}"
-        papers.append({
-            "id": f"arxiv-{arxiv_id}",
-            "arxiv_id": arxiv_id,
-            "title": title,
-            "abstract": summary[:1000],
-            "authors": authors[:4],
-            "date": published,
-            "url": link,
-            "source": "arXiv",
-        })
+        link = f"https://arxiv.org/abs/{arxiv_id}"
+        papers.append(
+            {
+                "id": f"arxiv-{arxiv_id}",
+                "arxiv_id": arxiv_id,
+                "title": title,
+                "abstract": summary[:1000],
+                "authors": authors[:4],
+                "date": published,
+                "url": link,
+                "source": "arXiv",
+            }
+        )
     return papers
+
 
 # ── Semantic Scholar fetch ────────────────────────────────────────────────────
 def fetch_semantic_scholar(max_results=10):
     """Fetch recent NLP/LLM papers from Semantic Scholar public API (no key needed)."""
     fields = "paperId,title,abstract,authors,year,publicationDate,externalIds,venue"
-    query  = urllib.parse.quote("large language model NLP transformer")
+    query = urllib.parse.quote("large language model NLP transformer")
     url = (
         f"https://api.semanticscholar.org/graph/v1/paper/search"
         f"?query={query}&limit={max_results}&fields={fields}"
@@ -87,24 +132,33 @@ def fetch_semantic_scholar(max_results=10):
             continue
         arxiv_id = (p.get("externalIds") or {}).get("ArXiv")
         paper_id = arxiv_id or p["paperId"]
-        url_link = (f"https://arxiv.org/abs/{arxiv_id}" if arxiv_id
-                    else f"https://www.semanticscholar.org/paper/{p['paperId']}")
-        papers.append({
-            "id": f"ss-{paper_id}",
-            "arxiv_id": arxiv_id,
-            "title": p["title"],
-            "abstract": p["abstract"][:1000],
-            "authors": [a["name"] for a in (p.get("authors") or [])[:4]],
-            "date": (p.get("publicationDate") or str(p.get("year", "")))[:10],
-            "url": url_link,
-            "source": "Semantic Scholar",
-        })
+        url_link = (
+            f"https://arxiv.org/abs/{arxiv_id}"
+            if arxiv_id
+            else f"https://www.semanticscholar.org/paper/{p['paperId']}"
+        )
+        papers.append(
+            {
+                "id": f"ss-{paper_id}",
+                "arxiv_id": arxiv_id,
+                "title": p["title"],
+                "abstract": p["abstract"][:1000],
+                "authors": [a["name"] for a in (p.get("authors") or [])[:4]],
+                "date": (p.get("publicationDate") or str(p.get("year", "")))[:10],
+                "url": url_link,
+                "source": "Semantic Scholar",
+            }
+        )
     return papers
+
 
 # ── Gemini tagging + summarisation ───────────────────────────────────────────
 def gemini_enrich(paper):
     """Call Gemini Flash to tag and summarise one paper. Returns (tags, summary)."""
-    prompt = f"""You are a research assistant specialising in NLP and LLMs.
+    prompt = f"""You are a research assistant for an NLP/LLM researcher interested in: instruction tuning, RAG, LLM reasoning, multilingual NLP, evaluation benchmarks,
+efficient fine-tuning, and LLM agents.
+
+Rate this paper's relevance as high/medium/low based on those interests.
 
 Paper title: {paper['title']}
 Abstract: {paper['abstract']}
@@ -117,18 +171,19 @@ Tasks:
 Respond with valid JSON only (no markdown fences):
 {{"tags": ["tag1", "tag2"], "summary": "Your summary here."}}"""
 
-    payload = json.dumps({
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.2, "maxOutputTokens": 300},
-    }).encode()
+    payload = json.dumps(
+        {
+            "contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {"temperature": 0.2, "maxOutputTokens": 300},
+        }
+    ).encode()
 
     url = (
         "https://generativelanguage.googleapis.com/v1beta/models/"
         f"gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
     )
     req = urllib.request.Request(
-        url, data=payload,
-        headers={"Content-Type": "application/json"}, method="POST"
+        url, data=payload, headers={"Content-Type": "application/json"}, method="POST"
     )
     with urllib.request.urlopen(req, timeout=30) as r:
         resp = json.loads(r.read())
@@ -140,9 +195,10 @@ Respond with valid JSON only (no markdown fences):
         if text.startswith("json"):
             text = text[4:]
     result = json.loads(text)
-    tags    = [t for t in result.get("tags", []) if t in VALID_TAGS][:5]
+    tags = [t for t in result.get("tags", []) if t in VALID_TAGS][:5]
     summary = result.get("summary", "")
     return tags, summary
+
 
 # ── Dedup helpers ─────────────────────────────────────────────────────────────
 def load_existing():
@@ -151,10 +207,11 @@ def load_existing():
             return json.load(f)
     return {"papers": [], "last_updated": ""}
 
+
 def merge(existing_papers, new_papers):
     seen = {p["id"] for p in existing_papers}
     merged = list(existing_papers)
-    added  = 0
+    added = 0
     for p in new_papers:
         if p["id"] not in seen:
             merged.append(p)
@@ -163,6 +220,7 @@ def merge(existing_papers, new_papers):
     # keep newest 500 papers max
     merged.sort(key=lambda p: p.get("date", ""), reverse=True)
     return merged[:500], added
+
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 def main():
@@ -177,7 +235,7 @@ def main():
     ss_papers = fetch_semantic_scholar(10)
     print(f"      Got {len(ss_papers)} from Semantic Scholar")
 
-    raw_papers = arxiv_papers + ss_papers
+    raw_papers = [p for p in arxiv_papers + ss_papers if is_relevant(p)]
 
     print(f"\n[2/3] Enriching {len(raw_papers)} papers with Gemini Flash…")
     enriched = []
@@ -185,14 +243,14 @@ def main():
         print(f"      [{i+1}/{len(raw_papers)}] {p['title'][:70]}…")
         try:
             tags, summary = gemini_enrich(p)
-            p["tags"]    = tags
+            p["tags"] = tags
             p["summary"] = summary
         except Exception as e:
             print(f"      ⚠ Gemini error: {e}")
-            p["tags"]    = []
+            p["tags"] = []
             p["summary"] = p["abstract"][:300]
         enriched.append(p)
-        time.sleep(0.5)   # stay under free-tier rate limit
+        time.sleep(0.5)  # stay under free-tier rate limit
 
     print("\n[3/3] Merging with existing papers and saving…")
     existing_data = load_existing()
@@ -208,6 +266,7 @@ def main():
         json.dump(output, f, indent=2)
 
     print(f"\nDone. Added {added} new papers. Total: {len(all_papers)}")
+
 
 if __name__ == "__main__":
     main()
