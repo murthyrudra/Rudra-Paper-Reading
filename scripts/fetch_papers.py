@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
 Research Radar - Daily Paper Fetcher
-Fetches from arXiv cs.CL + cs.AI + Semantic Scholar,
-uses Gemini Flash (free) to tag and summarize each paper,
-then writes papers.json to public/ for the static site.
+Sources: arXiv cs.CL/cs.AI, Semantic Scholar, ACL Anthology, ICLR (OpenReview)
+Uses Gemini Flash (free tier) to auto-tag and summarise each paper.
+Writes public/papers.json for the static site.
 """
 
 import os
@@ -18,7 +18,70 @@ import xml.etree.ElementTree as ET
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]  # set in GitHub Actions secret
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "public", "papers.json")
 MAX_PAPERS = 30  # papers to fetch per run
-ARXIV_CATS = ["cs.CL", "cs.AI", "cs.LG"]
+ARXIV_CATS = ["cs.CL", "cs.AI"]  # drop cs.LG to stay focused on NLP/LLMs
+MAX_ARXIV = 25
+MAX_SS = 10
+MAX_ACL = 15  # per venue fetch
+MAX_ICLR = 15
+
+# ── Interest filter — papers not matching any keyword are skipped ─────────────
+# Edit this list to focus on what YOU care about.
+INTEREST_KEYWORDS = [
+    "language model",
+    "llm",
+    "large language",
+    "instruction tun",
+    "rag",
+    "retrieval-augmented",
+    "retrieval augmented",
+    "reasoning",
+    "chain-of-thought",
+    "chain of thought",
+    "prompt",
+    "in-context learning",
+    "in context learning",
+    "fine-tun",
+    "lora",
+    "peft",
+    "rlhf",
+    "alignment",
+    "transformer",
+    "attention mechanism",
+    "nlp",
+    "natural language",
+    "text generation",
+    "question answering",
+    "machine translation",
+    "summarization",
+    "information extraction",
+    "named entity",
+    "sentiment",
+    "dialogue",
+    "conversational",
+    "agent",
+    "tool use",
+    "function call",
+    "evaluation",
+    "benchmark",
+    "dataset",
+    "hallucination",
+    "factuality",
+    "grounding",
+    "multimodal",
+    "vision language",
+    "vision-language",
+    "code generation",
+    "code llm",
+    "knowledge graph",
+    "interpretability",
+    "explainab",
+]
+
+
+def is_relevant(paper):
+    text = (paper.get("title", "") + " " + paper.get("abstract", "")).lower()
+    return any(kw in text for kw in INTEREST_KEYWORDS)
+
 
 VALID_TAGS = [
     "LLMs",
@@ -28,42 +91,15 @@ VALID_TAGS = [
     "Fine-tuning",
     "NLP",
     "Evaluation",
-    "Multimodal",
     "Alignment",
     "RLHF",
     "Prompting",
     "Retrieval",
     "Efficient Training",
     "Datasets",
-    "Interpretability",
-    "Code Generation",
-    "Speech",
-    "Vision-Language",
     "Knowledge Graphs",
     "Reinforcement Learning",
 ]
-
-INTEREST_KEYWORDS = [
-    "language model",
-    "LLM",
-    "instruction tuning",
-    "RAG",
-    "retrieval",
-    "reasoning",
-    "prompt",
-    "fine-tuning",
-    "NLP",
-    "transformer",
-    "agent",
-    "evaluation",
-    "benchmark",
-    "alignment",
-]
-
-
-def is_relevant(paper):
-    text = (paper["title"] + " " + paper["abstract"]).lower()
-    return any(kw in text for kw in INTEREST_KEYWORDS)
 
 
 # ── arXiv fetch ───────────────────────────────────────────────────────────────
@@ -152,6 +188,226 @@ def fetch_semantic_scholar(max_results=10):
     return papers
 
 
+# ── ACL Anthology ─────────────────────────────────────────────────────────────
+# Uses the Semantic Scholar API filtered by ACL venues — no scraping needed.
+ACL_VENUES = [
+    "ACL",
+    "EMNLP",
+    "NAACL",
+    "EACL",
+    "COLING",
+    "Findings of ACL",
+    "Findings of EMNLP",
+    "Findings of NAACL",
+    "TACL",
+    "CL",
+]
+
+
+def fetch_acl_anthology(max_results=MAX_ACL):
+    """
+    Pull recent papers from ACL venues via Semantic Scholar's venue filter.
+    Falls back to the ACL Anthology RSS feed for the current year.
+    """
+    papers = []
+
+    # --- Method 1: Semantic Scholar venue search (gets abstracts) ---
+    for venue in ["ACL", "EMNLP", "NAACL"]:
+        fields = "paperId,title,abstract,authors,year,publicationDate,externalIds,venue"
+        query = urllib.parse.quote(f"language model NLP {venue}")
+        url = (
+            f"https://api.semanticscholar.org/graph/v1/paper/search"
+            f"?query={query}&limit=8&fields={fields}&sort=publicationDate:desc"
+        )
+        req = urllib.request.Request(url, headers={"User-Agent": "ResearchRadar/1.0"})
+        try:
+            with urllib.request.urlopen(req, timeout=20) as r:
+                data = json.loads(r.read())
+            for p in data.get("data", []):
+                v = (p.get("venue") or "").upper()
+                if not any(
+                    acl in v
+                    for acl in ["ACL", "EMNLP", "NAACL", "EACL", "COLING", "TACL"]
+                ):
+                    continue
+                if not p.get("abstract"):
+                    continue
+                arxiv_id = (p.get("externalIds") or {}).get("ArXiv")
+                acl_id = (p.get("externalIds") or {}).get("ACL")
+                pid = acl_id or arxiv_id or p["paperId"]
+                link = (
+                    f"https://aclanthology.org/{acl_id}"
+                    if acl_id
+                    else (
+                        f"https://arxiv.org/abs/{arxiv_id}"
+                        if arxiv_id
+                        else f"https://www.semanticscholar.org/paper/{p['paperId']}"
+                    )
+                )
+                papers.append(
+                    {
+                        "id": f"acl-{pid}",
+                        "title": p["title"],
+                        "abstract": p["abstract"][:1000],
+                        "authors": [a["name"] for a in (p.get("authors") or [])[:4]],
+                        "date": (p.get("publicationDate") or str(p.get("year", "")))[
+                            :10
+                        ],
+                        "url": link,
+                        "source": "ACL Anthology",
+                        "venue": p.get("venue", venue),
+                    }
+                )
+            time.sleep(0.3)
+        except Exception as e:
+            print(f"  ⚠ ACL S2 fetch ({venue}) failed: {e}")
+
+    # --- Method 2: ACL Anthology RSS (recent additions, no abstracts) ---
+    # Use as a fallback / supplement when S2 doesn't return enough
+    if len(papers) < 5:
+        try:
+            rss_url = "https://aclanthology.org/anthology.rss"
+            req = urllib.request.Request(
+                rss_url, headers={"User-Agent": "ResearchRadar/1.0"}
+            )
+            with urllib.request.urlopen(req, timeout=20) as r:
+                rss_raw = r.read()
+            root = ET.fromstring(rss_raw)
+            seen_ids = {p["id"] for p in papers}
+            for item in root.findall(".//item")[:max_results]:
+                title_el = item.find("title")
+                link_el = item.find("link")
+                desc_el = item.find("description")
+                pub_el = item.find("pubDate")
+                if title_el is None or link_el is None:
+                    continue
+                link = link_el.text or ""
+                acl_id = link.rstrip("/").split("/")[-1]
+                pid = f"acl-rss-{acl_id}"
+                if pid in seen_ids:
+                    continue
+                abstract = ""
+                if desc_el is not None and desc_el.text:
+                    abstract = desc_el.text.strip()[:1000]
+                date_str = ""
+                if pub_el is not None and pub_el.text:
+                    try:
+                        from email.utils import parsedate_to_datetime
+
+                        date_str = parsedate_to_datetime(pub_el.text).date().isoformat()
+                    except Exception:
+                        pass
+                papers.append(
+                    {
+                        "id": pid,
+                        "title": title_el.text.strip() if title_el.text else "",
+                        "abstract": abstract,
+                        "authors": [],
+                        "date": date_str,
+                        "url": link,
+                        "source": "ACL Anthology",
+                        "venue": "ACL Anthology",
+                    }
+                )
+        except Exception as e:
+            print(f"  ⚠ ACL RSS fallback failed: {e}")
+
+    return papers[:max_results]
+
+
+# ── ICLR (OpenReview) ─────────────────────────────────────────────────────────
+def fetch_iclr(max_results=MAX_ICLR):
+    """
+    Fetch recent ICLR papers via the OpenReview public API.
+    Gets accepted papers from the most recent ICLR venue available.
+    """
+    # Try the two most recent years
+    current_year = datetime.date.today().year
+    papers = []
+
+    for year in [current_year, current_year - 1]:
+        venue_id = urllib.parse.quote(f"ICLR.cc/{year}/Conference")
+        url = (
+            f"https://api2.openreview.net/notes"
+            f"?content.venue=ICLR+{year}+poster"
+            f"&details=replyCount"
+            f"&limit={max_results}"
+            f"&offset=0"
+            f"&sort=cdate:desc"
+        )
+        # Also try oral/spotlight
+        urls_to_try = [
+            (
+                f"https://api2.openreview.net/notes"
+                f"?content.venueid=ICLR.cc%2F{year}%2FConference"
+                f"&limit={max_results}&offset=0&sort=cdate:desc"
+            ),
+        ]
+        for u in urls_to_try:
+            req = urllib.request.Request(u, headers={"User-Agent": "ResearchRadar/1.0"})
+            try:
+                with urllib.request.urlopen(req, timeout=20) as r:
+                    data = json.loads(r.read())
+                notes = data.get("notes", [])
+                if not notes:
+                    continue
+                for note in notes:
+                    content = note.get("content", {})
+
+                    # OpenReview v2 wraps values in {"value": ...}
+                    def val(field):
+                        v = content.get(field, "")
+                        return v.get("value", "") if isinstance(v, dict) else v
+
+                    title = val("title")
+                    abstract = val("abstract")
+                    authors = val("authors")
+                    if isinstance(authors, str):
+                        authors = [authors]
+                    pdf = val("pdf")
+                    forum = note.get("forum", "")
+                    venue = val("venue") or f"ICLR {year}"
+
+                    if not title or not abstract:
+                        continue
+
+                    link = (
+                        f"https://openreview.net/forum?id={forum}"
+                        if forum
+                        else "https://openreview.net"
+                    )
+                    date_ts = note.get("cdate") or note.get("mdate") or 0
+                    if date_ts:
+                        date_str = (
+                            datetime.datetime.utcfromtimestamp(date_ts / 1000)
+                            .date()
+                            .isoformat()
+                        )
+                    else:
+                        date_str = str(year)
+
+                    papers.append(
+                        {
+                            "id": f"iclr-{forum or title[:40]}",
+                            "title": title,
+                            "abstract": abstract[:1000],
+                            "authors": authors[:4],
+                            "date": date_str,
+                            "url": link,
+                            "source": "ICLR",
+                            "venue": venue,
+                        }
+                    )
+                if papers:
+                    break  # got results for this year, stop
+            except Exception as e:
+                print(f"  ⚠ ICLR OpenReview ({year}) failed: {e}")
+        if papers:
+            break
+
+    return papers[:max_results]
+
+
 # ── Gemini tagging + summarisation ───────────────────────────────────────────
 def gemini_enrich(paper):
     """Call Gemini Flash to tag and summarise one paper. Returns (tags, summary)."""
@@ -225,36 +481,62 @@ def merge(existing_papers, new_papers):
 # ── Main ──────────────────────────────────────────────────────────────────────
 def main():
     print("=== Research Radar Fetcher ===")
-    print(f"Run date: {datetime.date.today()}")
+    print(f"Run date: {datetime.date.today()}\n")
 
-    print("\n[1/3] Fetching arXiv papers…")
-    arxiv_papers = fetch_arxiv(MAX_PAPERS)
-    print(f"      Got {len(arxiv_papers)} from arXiv")
+    all_raw = []
 
-    print("[1/3] Fetching Semantic Scholar papers…")
-    ss_papers = fetch_semantic_scholar(10)
-    print(f"      Got {len(ss_papers)} from Semantic Scholar")
+    print("[1/4] arXiv cs.CL + cs.AI…")
+    papers = fetch_arxiv()
+    print(f"      Fetched {len(papers)}")
+    all_raw += papers
 
-    raw_papers = [p for p in arxiv_papers + ss_papers if is_relevant(p)]
+    print("[2/4] Semantic Scholar…")
+    papers = fetch_semantic_scholar()
+    print(f"      Fetched {len(papers)}")
+    all_raw += papers
 
-    print(f"\n[2/3] Enriching {len(raw_papers)} papers with Gemini Flash…")
+    print("[3/4] ACL Anthology…")
+    papers = fetch_acl_anthology()
+    print(f"      Fetched {len(papers)}")
+    all_raw += papers
+
+    print("[4/4] ICLR (OpenReview)…")
+    papers = fetch_iclr()
+    print(f"      Fetched {len(papers)}")
+    all_raw += papers
+
+    # Deduplicate by id before enrichment
+    seen, unique = set(), []
+    for p in all_raw:
+        if p["id"] not in seen:
+            seen.add(p["id"])
+            unique.append(p)
+
+    # Interest filter — skip papers clearly outside NLP/LLM
+    relevant = [p for p in unique if is_relevant(p)]
+    skipped = len(unique) - len(relevant)
+    print(
+        f"\nInterest filter: {len(relevant)} relevant / {skipped} skipped out of {len(unique)} total"
+    )
+
+    print(f"\nEnriching {len(relevant)} papers with Gemini Flash…")
     enriched = []
-    for i, p in enumerate(raw_papers):
-        print(f"      [{i+1}/{len(raw_papers)}] {p['title'][:70]}…")
+    for i, p in enumerate(relevant):
+        print(f"  [{i+1}/{len(relevant)}] [{p['source']}] {p['title'][:65]}…")
         try:
             tags, summary = gemini_enrich(p)
             p["tags"] = tags
             p["summary"] = summary
         except Exception as e:
-            print(f"      ⚠ Gemini error: {e}")
+            print(f"  ⚠ Gemini error: {e}")
             p["tags"] = []
-            p["summary"] = p["abstract"][:300]
+            p["summary"] = p.get("abstract", "")[:300]
         enriched.append(p)
-        time.sleep(0.5)  # stay under free-tier rate limit
+        time.sleep(0.5)  # stay within free-tier rate limit
 
-    print("\n[3/3] Merging with existing papers and saving…")
+    print("\nMerging with existing papers and saving…")
     existing_data = load_existing()
-    all_papers, added = merge(existing_data["papers"], enriched)
+    all_papers, added = merge(existing_data.get("papers", []), enriched)
 
     output = {
         "last_updated": datetime.datetime.utcnow().isoformat() + "Z",
@@ -265,7 +547,7 @@ def main():
     with open(OUTPUT_PATH, "w") as f:
         json.dump(output, f, indent=2)
 
-    print(f"\nDone. Added {added} new papers. Total: {len(all_papers)}")
+    print(f"\nDone ✓  Added {added} new papers. Total in store: {len(all_papers)}")
 
 
 if __name__ == "__main__":
