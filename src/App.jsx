@@ -1,15 +1,17 @@
 import { useState, useEffect, useMemo } from "react";
 
 const ALL_TAGS = [
-  "LLMs","RAG","Agents","Reasoning","Fine-tuning","NLP","Evaluation",
-  "Multimodal","Alignment","RLHF","Prompting","Retrieval",
-  "Efficient Training","Datasets","Interpretability","Code Generation",
-  "Speech","Vision-Language","Knowledge Graphs","Reinforcement Learning"
+  "LLMs", "RAG", "Agents", "Reasoning", "Fine-tuning", "NLP", "Evaluation",
+  "Multimodal", "Alignment", "RLHF", "Prompting", "Retrieval",
+  "Efficient Training", "Datasets", "Interpretability", "Code Generation",
+  "Speech", "Vision-Language", "Knowledge Graphs", "Reinforcement Learning"
 ];
 
 const SOURCE_COLORS = {
-  "arXiv":            { bg: "#EAF3DE", text: "#3B6D11" },
+  "arXiv": { bg: "#EAF3DE", text: "#3B6D11" },
   "Semantic Scholar": { bg: "#E6F1FB", text: "#185FA5" },
+  "ACL Anthology": { bg: "#FAEEDA", text: "#854F0B" },
+  "ICLR": { bg: "#EEEDFE", text: "#3C3489" },
 };
 
 function TagPill({ tag, active, onClick }) {
@@ -63,6 +65,11 @@ function PaperCard({ paper }) {
             }}>
               {paper.source}
             </span>
+            {paper.venue && paper.venue !== paper.source && (
+              <span style={{ fontSize: 11, padding: "2px 8px", borderRadius: 99, background: "#f0ede6", color: "#666" }}>
+                {paper.venue}
+              </span>
+            )}
             <span style={{ fontSize: 12, color: "#999" }}>{paper.date}</span>
           </div>
           <h3 style={{ fontSize: 15, fontWeight: 600, color: "#111", lineHeight: 1.45, margin: 0 }}>
@@ -70,7 +77,7 @@ function PaperCard({ paper }) {
           </h3>
           {paper.authors?.length > 0 && (
             <p style={{ fontSize: 12, color: "#888", margin: "5px 0 0" }}>
-              {paper.authors.slice(0,3).join(", ")}{paper.authors.length > 3 ? " et al." : ""}
+              {paper.authors.slice(0, 3).join(", ")}{paper.authors.length > 3 ? " et al." : ""}
             </p>
           )}
         </div>
@@ -118,12 +125,13 @@ function PaperCard({ paper }) {
 }
 
 export default function App() {
-  const [data, setData]         = useState(null);
-  const [loading, setLoading]   = useState(true);
-  const [error, setError]       = useState(null);
-  const [search, setSearch]     = useState("");
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [search, setSearch] = useState("");
   const [activeTags, setActiveTags] = useState([]);
-  const [sortBy, setSortBy]     = useState("date");
+  const [activeSource, setActiveSource] = useState("all");
+  const [sortBy, setSortBy] = useState("date");
   const [showAllTags, setShowAllTags] = useState(false);
 
   useEffect(() => {
@@ -158,22 +166,26 @@ export default function App() {
       );
     }
 
+    if (activeSource !== "all") {
+      papers = papers.filter(p => p.source === activeSource);
+    }
+
     if (sortBy === "date") {
-      papers = [...papers].sort((a,b) => (b.date||"").localeCompare(a.date||""));
+      papers = [...papers].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
     }
 
     return papers;
-  }, [data, search, activeTags, sortBy]);
+  }, [data, search, activeTags, activeSource, sortBy]);
 
   // Tag frequency for ordering
   const tagCounts = useMemo(() => {
     if (!data?.papers) return {};
     const counts = {};
-    data.papers.forEach(p => p.tags?.forEach(t => { counts[t] = (counts[t]||0)+1; }));
+    data.papers.forEach(p => p.tags?.forEach(t => { counts[t] = (counts[t] || 0) + 1; }));
     return counts;
   }, [data]);
 
-  const sortedTags = [...ALL_TAGS].sort((a,b) => (tagCounts[b]||0) - (tagCounts[a]||0));
+  const sortedTags = [...ALL_TAGS].sort((a, b) => (tagCounts[b] || 0) - (tagCounts[a] || 0));
   const visibleTags = showAllTags ? sortedTags : sortedTags.slice(0, 10);
 
   const lastUpdated = data?.last_updated
@@ -207,11 +219,13 @@ export default function App() {
 
           {/* Stats */}
           {data && (
-            <div style={{ display: "flex", gap: 24, marginTop: 20, fontFamily: "sans-serif" }}>
+            <div style={{ display: "flex", gap: 24, marginTop: 20, fontFamily: "sans-serif", flexWrap: "wrap" }}>
               {[
-                ["Total papers", data.total],
+                ["Total", data.total],
                 ["Showing", filtered.length],
-                ["Sources", "arXiv + S2"],
+                ["arXiv", data.papers.filter(p => p.source === "arXiv").length],
+                ["ACL", data.papers.filter(p => p.source === "ACL Anthology").length],
+                ["ICLR", data.papers.filter(p => p.source === "ICLR").length],
               ].map(([label, val]) => (
                 <div key={label}>
                   <div style={{ fontSize: 20, fontWeight: 600, color: "#fff" }}>{val}</div>
@@ -238,6 +252,30 @@ export default function App() {
               background: "#fafaf8", boxSizing: "border-box",
             }}
           />
+
+          {/* Source pills */}
+          <div style={{ marginTop: 12, display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+            <span style={{ fontSize: 12, color: "#999", fontFamily: "sans-serif", marginRight: 4 }}>Source:</span>
+            {["all", "arXiv", "ACL Anthology", "ICLR", "Semantic Scholar"].map(src => (
+              <button
+                key={src}
+                onClick={() => setActiveSource(src)}
+                style={{
+                  fontSize: 12, padding: "4px 11px", borderRadius: 99,
+                  border: activeSource === src ? "none" : "1px solid #d0cfc8",
+                  background: activeSource === src
+                    ? (SOURCE_COLORS[src]?.bg || "#1a1a1a")
+                    : "transparent",
+                  color: activeSource === src
+                    ? (SOURCE_COLORS[src]?.text || "#fff")
+                    : "#666",
+                  cursor: "pointer", fontFamily: "sans-serif",
+                }}
+              >
+                {src === "all" ? "All sources" : src}
+              </button>
+            ))}
+          </div>
 
           <div style={{ marginTop: 12, display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
             <span style={{ fontSize: 12, color: "#999", fontFamily: "sans-serif", marginRight: 4 }}>Filter:</span>
