@@ -106,18 +106,34 @@ function PaperCard({ paper }) {
               {paper.summary}
             </p>
           )}
-          <a
-            href={paper.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={e => e.stopPropagation()}
-            style={{
-              fontSize: 13, color: "#185FA5", textDecoration: "none",
-              fontWeight: 500, display: "inline-flex", alignItems: "center", gap: 4,
-            }}
-          >
-            View paper ↗
-          </a>
+          <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+            <a
+              href={paper.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={e => e.stopPropagation()}
+              style={{
+                fontSize: 13, color: "#185FA5", textDecoration: "none",
+                fontWeight: 500, display: "inline-flex", alignItems: "center", gap: 4,
+              }}
+            >
+              View paper ↗
+            </a>
+            {paper.notion_url && (
+              <a
+                href={paper.notion_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={e => e.stopPropagation()}
+                style={{
+                  fontSize: 13, color: "#8B4513", textDecoration: "none",
+                  fontWeight: 500, display: "inline-flex", alignItems: "center", gap: 4,
+                }}
+              >
+                📝 My notes ↗
+              </a>
+            )}
+          </div>
         </div>
       )}
     </div>

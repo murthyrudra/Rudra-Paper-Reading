@@ -17,12 +17,12 @@ import xml.etree.ElementTree as ET
 # ── Config ────────────────────────────────────────────────────────────────────
 GEMINI_API_KEY = os.environ["GEMINI_API_KEY"]  # set in GitHub Actions secret
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "..", "public", "papers.json")
-MAX_PAPERS = 30  # papers to fetch per run
+MAX_PAPERS = 200  # papers to fetch per run
 ARXIV_CATS = ["cs.CL"]  # drop cs.LG to stay focused on NLP/LLMs
-MAX_ARXIV = 25
+MAX_ARXIV = 50
 MAX_SS = 10
-MAX_ACL = 15  # per venue fetch
-MAX_ICLR = 15
+MAX_ACL = 50  # per venue fetch
+MAX_ICLR = 50
 
 # ── Interest filter — papers not matching any keyword are skipped ─────────────
 # Edit this list to focus on what YOU care about.
