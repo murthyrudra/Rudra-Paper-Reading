@@ -83,7 +83,8 @@ def add_paper_interactive():
     authors_input = input("Authors (comma-separated, optional): ").strip()
     authors = [a.strip() for a in authors_input.split(",")] if authors_input else []
 
-    notion_url = input("Notion summary URL (optional): ").strip()
+    notion_url = input("Notion notes URL (optional): ").strip()
+    github_url = input("GitHub summary URL (optional): ").strip()
 
     # Category
     print(f"\nCategory (choose number):")
@@ -132,6 +133,9 @@ def add_paper_interactive():
     if notion_url:
         paper["notion_url"] = notion_url
 
+    if github_url:
+        paper["github_url"] = github_url
+
     # Load existing and add
     data = load_existing()
 
@@ -165,7 +169,14 @@ def add_paper_interactive():
 
 
 def add_paper_from_args(
-    title, url, tags=None, category="Other", summary="", authors=None, notion_url=None
+    title,
+    url,
+    tags=None,
+    category="Other",
+    summary="",
+    authors=None,
+    notion_url=None,
+    github_url=None,
 ):
     """Programmatic mode - add paper from command line args"""
 
@@ -202,6 +213,9 @@ def add_paper_from_args(
 
     if notion_url:
         paper["notion_url"] = notion_url
+
+    if github_url:
+        paper["github_url"] = github_url
 
     data = load_existing()
 

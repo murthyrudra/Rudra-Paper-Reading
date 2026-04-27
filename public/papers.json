@@ -1,7 +1,28 @@
 {
-  "last_updated": "2026-04-26T19:15:47.095509Z",
-  "total": 181,
+  "last_updated": "2026-04-27T04:54:18.360842Z",
+  "total": 182,
   "papers": [
+    {
+      "id": "manual-71655",
+      "title": "Synthetic continued pretraining",
+      "abstract": "Pretraining on large-scale, unstructured internet text enables language models to acquire a significant amount of world knowledge. However, this knowledge acquisition is data-inefficient\u2014to learn a fact, models must be trained on hundreds to thousands of diverse representations of it. This poses a challenge when adapting a pretrained model to a small corpus of domain-specific documents, where each fact may appear rarely or only once. We propose to bridge this gap with synthetic continued pretraining: using the small domain-specific corpus to synthesize a large corpus more amenable to learning, and then performing continued pretraining on the synthesized corpus. We instantiate this proposal with EntiGraph, a synthetic data augmentation algorithm that extracts salient entities from the source corpus and then generates diverse text by drawing connections between those entities. Synthetic continued pretraining with EntiGraph enables a language model to answer questions and follow generic instructions related to the source documents without access to them. If the source documents are instead available at inference time, we show that the knowledge acquired through our approach compounds with retrieval-augmented generation. To better understand these results, we build a simple mathematical model of EntiGraph, and show how synthetic data augmentation can \u201crearrange\u201d knowledge to enable more data-efficient learning.",
+      "authors": [
+        "Zitong Yang",
+        "Neil Band",
+        "Shuangping Li",
+        "Emmanuel Candes"
+      ],
+      "date": "2026-04-27",
+      "url": "https://iclr.cc/virtual/2025/poster/31270",
+      "source": "Manual",
+      "category": "Other",
+      "tags": [
+        "RAG"
+      ],
+      "summary": "",
+      "venue": "ICLR 2025",
+      "github_url": "https://github.com/murthyrudra/research-radar/blob/main/papers_git_summary/2026-synthetic-continued-pretraining.md"
+    },
     {
       "id": "acl-271",
       "title": "Beyond Random Sampling: Efficient Language Model Pretraining via Curriculum Learning",

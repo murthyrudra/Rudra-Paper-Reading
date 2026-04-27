@@ -130,7 +130,21 @@ function PaperCard({ paper }) {
                   fontWeight: 500, display: "inline-flex", alignItems: "center", gap: 4,
                 }}
               >
-                📝 My notes ↗
+                📔 Notion notes ↗
+              </a>
+            )}
+            {paper.github_url && (
+              <a
+                href={paper.github_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={e => e.stopPropagation()}
+                style={{
+                  fontSize: 13, color: "#24292e", textDecoration: "none",
+                  fontWeight: 500, display: "inline-flex", alignItems: "center", gap: 4,
+                }}
+              >
+                📝 Summary ↗
               </a>
             )}
           </div>
