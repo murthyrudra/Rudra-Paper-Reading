@@ -1,0 +1,7 @@
+# Paper Summaries
+
+This directory contains markdown summaries of papers you've read.
+
+Each file follows the naming convention: `YYYY-paper-title-slug.md`
+
+Example: `2024-retrieval-augmented-generation.md`
