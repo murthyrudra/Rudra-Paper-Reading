@@ -1,7 +1,65 @@
 {
-  "last_updated": "2026-04-27T04:54:18.360842Z",
-  "total": 182,
+  "last_updated": "2026-05-02T06:10:19.403055Z",
+  "total": 185,
   "papers": [
+    {
+      "id": "iclr-rzQGHXNReU",
+      "title": "RAFT: Adapting Language Model to Domain Specific RAG",
+      "abstract": "",
+      "authors": [
+        "Tianjun Zhang",
+        "Shishir G. Patil",
+        "Naman Jain",
+        "Sheng Shen"
+      ],
+      "date": "2026-05-02",
+      "url": "https://openreview.net/forum?id=rzQGHXNReU",
+      "source": "ICLR",
+      "category": "RAG",
+      "tags": [
+        "RAG"
+      ],
+      "summary": "",
+      "venue": "COLM 2024"
+    },
+    {
+      "id": "arxiv-2403.10131",
+      "title": "RAFT: Adapting Language Model to Domain Specific RAG",
+      "abstract": "",
+      "authors": [
+        "Tianjun Zhang",
+        "Shishir G. Patil",
+        "Naman Jain",
+        "Sheng Shen"
+      ],
+      "date": "2026-05-02",
+      "url": "https://arxiv.org/abs/2403.10131",
+      "source": "arXiv",
+      "category": "RAG",
+      "tags": [
+        "RAG"
+      ],
+      "summary": "",
+      "venue": "COLM 2024"
+    },
+    {
+      "id": "arxiv-2510.27566",
+      "title": "INTERACT-RAG: REASON AND INTERACT WITH THECORPUS, BEYOND BLACK-BOX RETRIEVAL",
+      "abstract": "Retrieval-Augmented Generation (RAG) has significantly enhanced LLMs by incorporating external information. However, prevailing agentic RAG approaches are constrained by a critical limitation: they treat the retrieval process as a black-box querying operation. This confines agents' actions to query issuing, hindering its ability to tackle complex information-seeking tasks. To address this, we introduce Interact-RAG, a new paradigm that elevates the LLM agent from a passive query issuer into an active manipulator of the retrieval process. We dismantle the black-box with a Corpus Interaction Engine, equipping the agent with a set of action primitives for fine-grained control over information retrieval. To further empower the agent on the entire RAG pipeline, we first develop a reasoning-enhanced workflow, which enables both zero-shot execution and the synthesis of interaction trajectories. We then leverage this synthetic data to train a fully autonomous end-to-end agent via Supervised Fine-Tuning (SFT), followed by refinement with Reinforcement Learning (RL). Extensive experiments across six benchmarks demonstrate that Interact-RAG significantly outperforms other advanced methods, validating the efficacy of our reasoning-interaction strategy.",
+      "authors": [
+        "Yulong Hui",
+        "Chao Chen",
+        "Zhihang Fu",
+        "Yihao Liu"
+      ],
+      "date": "2026-04-27",
+      "url": "https://arxiv.org/pdf/2510.27566",
+      "source": "arXiv",
+      "category": "Other",
+      "tags": [],
+      "summary": "",
+      "venue": "ICLR 2026"
+    },
     {
       "id": "manual-71655",
       "title": "Synthetic continued pretraining",
