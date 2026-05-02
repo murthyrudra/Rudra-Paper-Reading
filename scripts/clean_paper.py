@@ -2,6 +2,7 @@
 
 import json
 import sys
+import re
 
 
 def format_author(a):
@@ -28,6 +29,22 @@ def format_author(a):
     return str(a)
 
 
+def normalize_title(title):
+    """
+    Normalize title for deduplication:
+    - lowercase
+    - remove punctuation
+    - collapse whitespace
+    """
+    if not title:
+        return ""
+
+    title = title.lower()
+    title = re.sub(r"[^\w\s]", "", title)  # remove punctuation
+    title = re.sub(r"\s+", " ", title).strip()
+    return title
+
+
 def clean_papers(input_path, output_path=None):
     with open(input_path, "r") as f:
         data = json.load(f)
@@ -36,20 +53,31 @@ def clean_papers(input_path, output_path=None):
     original_count = len(papers)
 
     cleaned = []
+    seen_titles = set()
+    duplicate_count = 0
+    removed_no_tags = 0
 
     for p in papers:
         # ── filter: must have tags ──
         tags = p.get("tags")
         if not tags or not isinstance(tags, list) or len(tags) == 0:
+            removed_no_tags += 1
             continue
 
         # ── fix authors ──
         if "authors" in p and isinstance(p["authors"], list):
             p["authors"] = [format_author(a) for a in p["authors"]]
 
+        # ── deduplication using title ──
+        norm_title = normalize_title(p.get("title", ""))
+
+        if norm_title in seen_titles:
+            duplicate_count += 1
+            continue
+
+        seen_titles.add(norm_title)
         cleaned.append(p)
 
-    removed = original_count - len(cleaned)
     data["papers"] = cleaned
 
     if output_path is None:
@@ -59,7 +87,8 @@ def clean_papers(input_path, output_path=None):
         json.dump(data, f, indent=2)
 
     print(f"Original papers: {original_count}")
-    print(f"Removed (no tags): {removed}")
+    print(f"Removed (no tags): {removed_no_tags}")
+    print(f"Duplicates removed (by title): {duplicate_count}")
     print(f"Remaining: {len(cleaned)}")
     print(f"Saved to: {output_path}")
 
