@@ -1,7 +1,27 @@
 {
-  "last_updated": "2026-05-02T06:10:19.403055Z",
-  "total": 185,
+  "last_updated": "2026-05-02T06:45:30.844986Z",
+  "total": 45,
   "papers": [
+    {
+      "id": "acl-2025.findings-naacl.329.pdf",
+      "title": "Systematic Knowledge Injection into Large Language Models via Diverse Augmentation for Domain-Specific RAG",
+      "abstract": "",
+      "authors": [
+        "Kushagra Bhushan",
+        "Yatin Nandwani",
+        "Dinesh Khandelwal",
+        "Sonam Gupta"
+      ],
+      "date": "2026-05-02",
+      "url": "https://aclanthology.org/2025.findings-naacl.329.pdf",
+      "source": "ACL Anthology",
+      "category": "RAG",
+      "tags": [
+        "RAG"
+      ],
+      "summary": "",
+      "venue": "NAACL 2025"
+    },
     {
       "id": "iclr-rzQGHXNReU",
       "title": "RAFT: Adapting Language Model to Domain Specific RAG",

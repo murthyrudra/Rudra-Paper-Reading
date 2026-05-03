@@ -100,5 +100,12 @@ company whose head office is in Delhi. ##Answer: Delhi
 
 ---
 
+## Limitations
+
+- Performing RAFT without data replay leads to catastrophic forgetting.
+- This is crucial for applications with tool calling capability.
+
+---
+
 **Date Read:** 2026-05-02  
 **Status:** ✅ Completed
