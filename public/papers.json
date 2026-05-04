@@ -1,7 +1,86 @@
 {
-  "last_updated": "2026-05-04T05:51:56.000244Z",
-  "total": 47,
+  "last_updated": "2026-05-04T13:58:47.658679Z",
+  "total": 51,
   "papers": [
+    {
+      "id": "manual-60733",
+      "title": "From RAG to Memory: Non-Parametric Continual Learning for Large Language Models",
+      "abstract": "",
+      "authors": [
+        "Bernal Jim\u00e9nez Guti\u00e9rrez",
+        "Yiheng Shu",
+        "Weijian Qi",
+        "Sizhe Zhou"
+      ],
+      "date": "2026-05-04",
+      "url": "https://arxiv.org/abs/2502.14802",
+      "source": "Manual",
+      "category": "RAG",
+      "tags": [
+        "RAG"
+      ],
+      "summary": "",
+      "venue": "ICML 2025"
+    },
+    {
+      "id": "manual-3551",
+      "title": "HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models",
+      "abstract": "",
+      "authors": [
+        "Bernal Jimenez Gutierrez, Yiheng Shu, Yu Gu, Michihiro Yasunaga, Yu Su"
+      ],
+      "date": "2026-05-04",
+      "url": "https://arxiv.org/pdf/2405.14831v3",
+      "source": "Manual",
+      "category": "RAG",
+      "tags": [
+        "RAG"
+      ],
+      "summary": "",
+      "notion_url": "",
+      "github_url": "",
+      "venue": "NeuRips 2024"
+    },
+    {
+      "id": "acl-2025.findings-ijcnlp.62",
+      "title": "FB-RAG: Improving RAG with Forward and Backward Lookup",
+      "abstract": "",
+      "authors": [
+        "Kushal Chawla",
+        "Alfy Samuel",
+        "Anoop Kumar",
+        "Daben Liu"
+      ],
+      "date": "2026-05-04",
+      "url": "https://aclanthology.org/2025.findings-ijcnlp.62/",
+      "source": "ACL Anthology",
+      "category": "RAG",
+      "tags": [
+        "RAG"
+      ],
+      "summary": "",
+      "venue": "IJCNLP 2025"
+    },
+    {
+      "id": "acl-2026.eacl-srw.48",
+      "title": "DRAGOn: Designing RAG On Periodically Updated Corpus",
+      "abstract": "",
+      "authors": [
+        "Fedor Chernogorskii",
+        "Sergei Averkiev",
+        "Liliya Kudraleeva",
+        "Zaven Martirosian"
+      ],
+      "date": "2026-05-04",
+      "url": "https://aclanthology.org/2026.eacl-srw.48/",
+      "source": "ACL Anthology",
+      "category": "RAG",
+      "tags": [
+        "RAG"
+      ],
+      "summary": "",
+      "venue": "EACL SRW 2026"
+    },
     {
       "id": "manual-13022",
       "title": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization",
