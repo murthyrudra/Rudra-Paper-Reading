@@ -1,7 +1,27 @@
 {
-  "last_updated": "2026-05-02T06:45:30.844986Z",
-  "total": 45,
+  "last_updated": "2026-05-03T14:57:02.441745Z",
+  "total": 46,
   "papers": [
+    {
+      "id": "arxiv-2210.03629",
+      "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+      "abstract": "",
+      "authors": [
+        "Shunyu Yao",
+        "Jeffrey Zhao",
+        "Dian Yu",
+        "Nan Du"
+      ],
+      "date": "2026-05-03",
+      "url": "https://arxiv.org/abs/2210.03629",
+      "source": "arXiv",
+      "category": "RAG",
+      "tags": [
+        "RAG"
+      ],
+      "summary": "",
+      "venue": "ICLR 2023"
+    },
     {
       "id": "acl-2025.findings-naacl.329.pdf",
       "title": "Systematic Knowledge Injection into Large Language Models via Diverse Augmentation for Domain-Specific RAG",
