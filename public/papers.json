@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-04T13:58:47.658679Z",
+  "last_updated": "2026-05-05T07:37:02.083487Z",
   "total": 51,
   "papers": [
     {
@@ -38,9 +38,8 @@
       ],
       "summary": "",
       "notion_url": "",
-      "github_url": "",
-      "venue": "NeuRips 2024",
-      "github_url": "https://github.com/murthyrudra/Rudra-Paper-Reading/blob/main/papers_git_summary/2026-hipporag-neurobiologically-inspired-long-term-memory-for-lar.md"
+      "github_url": "https://github.com/murthyrudra/Rudra-Paper-Reading/blob/main/papers_git_summary/2026-hipporag-neurobiologically-inspired-long-term-memory-for-lar.md",
+      "venue": "NeuRips 2024"
     },
     {
       "id": "acl-2025.findings-ijcnlp.62",
