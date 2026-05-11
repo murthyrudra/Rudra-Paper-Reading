@@ -1,7 +1,49 @@
 {
-  "last_updated": "2026-05-04T13:58:47.658679Z",
-  "total": 51,
+  "last_updated": "2026-05-10T09:34:08.178096Z",
+  "total": 53,
   "papers": [
+    {
+      "id": "arxiv-2401.18059",
+      "title": "RAPTOR: Recursive Abstractive Processing for Tree-Organized Retrieval",
+      "abstract": "",
+      "authors": [
+        "Parth Sarthi",
+        "Salman Abdullah",
+        "Aditi Tuli",
+        "Shubh Khanna"
+      ],
+      "date": "2026-05-10",
+      "url": "https://arxiv.org/abs/2401.18059",
+      "source": "arXiv",
+      "category": "RAG",
+      "tags": [
+        "RAG"
+      ],
+      "summary": "",
+      "venue": "ICLR 2025",
+      "github_url": "https://github.com/murthyrudra/Rudra-Paper-Reading/blob/main/papers_git_summary/2026-raptor-recursive-abstractive-processing-for-tree-organized-r.md"
+    },
+    {
+      "id": "acl-2023.acl-long.557",
+      "title": "Interleaving Retrieval with Chain-of-Thought Reasoning for Knowledge-Intensive Multi-Step Questions",
+      "abstract": "",
+      "authors": [
+        "Harsh Trivedi",
+        "Niranjan Balasubramanian",
+        "Tushar Khot",
+        "Ashish Sabharwal"
+      ],
+      "date": "2026-05-06",
+      "url": "https://aclanthology.org/2023.acl-long.557/",
+      "source": "ACL Anthology",
+      "category": "RAG",
+      "tags": [
+        "RAG"
+      ],
+      "summary": "",
+      "venue": "ACL 2023",
+      "github_url": "https://github.com/murthyrudra/Rudra-Paper-Reading/blob/main/papers_git_summary/2026-interleaving-retrieval-with-chain-of-thought-reasoning-for-k.md"
+    },
     {
       "id": "manual-60733",
       "title": "From RAG to Memory: Non-Parametric Continual Learning for Large Language Models",
@@ -38,9 +80,8 @@
       ],
       "summary": "",
       "notion_url": "",
-      "github_url": "",
-      "venue": "NeuRips 2024",
-      "github_url": "https://github.com/murthyrudra/Rudra-Paper-Reading/blob/main/papers_git_summary/2026-hipporag-neurobiologically-inspired-long-term-memory-for-lar.md"
+      "github_url": "https://github.com/murthyrudra/Rudra-Paper-Reading/blob/main/papers_git_summary/2026-hipporag-neurobiologically-inspired-long-term-memory-for-lar.md",
+      "venue": "NeuRips 2024"
     },
     {
       "id": "acl-2025.findings-ijcnlp.62",

@@ -19,7 +19,7 @@ In order to thrive in hostile and ever-changing natural environments, mammalian 
 
 1. A RAG framework that serves as a long-term memory for LLMs 
 2. Use an LLM to transform a corpus into a schemaless knowledge graph
-3. Given a query, a HippoRag indetifies the key concepts in the query and runs  Personalized PageRank (PPR) algorithm on the KG
+3. Given a query, a HippoRag indetifies the key concepts in the query and runs Personalized PageRank (PPR) algorithm on the KG
 
 ---
 
