@@ -23,7 +23,7 @@ Prompting-based large language models (LLMs) are surprisingly powerful at genera
 ## 🎯 Key Contributions
 1. Propose an interleaving approach where the idea is to use retrieval to guide CoT and use CoT to guide the retrieval process
 2. Retrieve a set of base paragraphs using the query and alternate between the two steps
-    - Extend CoT: QUestion, retrived paragraphs, CoT is used to generate the next CoT sentences
+    - Extend CoT: Question, retrived paragraphs, CoT is used to generate the next CoT sentences
     - Expand Retrieved Information: use the last CoT sentence as query to retrieve more paragraphs
 
 ---
